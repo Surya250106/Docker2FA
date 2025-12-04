@@ -1,0 +1,3 @@
+# Ensures the cron configuration file uses LF (Unix) line endings,
+# which is required for the cron daemon to execute the job correctly.
+cron/2fa-cron text eol=lf
