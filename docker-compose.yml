@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Defines the main application service
+  pki-2fa-service:
+    # Use the current directory as the build context and specify the Dockerfile
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    
+    # Optional: Assign a recognizable container name
+    container_name: pki-2fa-app
+    
+    # Map host port 8080 to container port 8080
+    ports:
+      - "8080:8080"
+    
+    # Critical: Set restart policy to ensure the service comes back up
+    restart: unless-stopped
+    
+    # Environment variables (TZ=UTC is already set in the Dockerfile, but good practice to duplicate here)
+    environment:
+      - TZ=UTC
+    
+    # Volume mounts for persistence and required files
+    volumes:
+      # 1. Persistent storage for the decrypted seed
+      - seed-data:/data
+      # 2. Persistent storage for cron job output
+      - cron-output:/cron
+      # 3. Mount key files read-only (ensures the container always has them)
+      # NOTE: This assumes your application and Dockerfile access the keys directly from /app
+      # These files are already copied in the Dockerfile, but mounting ensures fresh files during development
+      - ./student_private.pem:/app/student_private.pem:ro
+      - ./student_public.pem:/app/student_public.pem:ro
+      - ./instructor_public.pem:/app/instructor_public.pem:ro
+
+# Define the named volumes (storage persistence across restarts)
+volumes:
+  seed-data:
+    name: pki_2fa_seed_data
+  cron-output:
+    name: pki_2fa_cron_output
