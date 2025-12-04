@@ -1,0 +1,5 @@
+# Cron job to generate and log a 2FA code every minute
+* * * * * cd /app && /usr/local/bin/python3 scripts/log_2fa_cron.py >> /cron/last_code.txt 2>&1
+
+# The blank line below is often required for cron to recognize the file correctly
+
