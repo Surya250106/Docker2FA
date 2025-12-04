@@ -1,0 +1,6 @@
+cryptography
+pyotp
+fastapi
+uvicorn
+pydantic
+requests # If you kept request_seed.pyuvicorn[standard]
